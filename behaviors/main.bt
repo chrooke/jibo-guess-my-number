@@ -1,41 +1,623 @@
 {
-  "1": {
-    "id": 1,
-    "class": "Sequence",
-    "name": "",
-    "asset-pack": "core",
-    "children": [
-      4,
-      6
-    ],
-    "decorators": [],
-    "options": {}
-  },
-  "4": {
-    "id": 4,
-    "class": "PlayAnimation",
-    "name": "Play a greeting",
-    "asset-pack": "core",
-    "parent": 1,
-    "options": {
-      "animPath": "greeting.keys",
-      "config": [
-        "(animation) => {",
-        "}"
-      ]
+    "1": {
+        "id": 1,
+        "class": "Sequence",
+        "name": "",
+        "asset-pack": "core",
+        "children": [
+            "964f3be4-6506-4d6b-a8fc-b2b912783e39",
+            "0d0b684a-7d50-4441-b370-f68f63327b99",
+            "de62b17c-2a6f-4120-8c1d-ed059842b025",
+            "755f3e00-2534-4d41-ad8d-0af8e2f63cf6"
+        ],
+        "decorators": [],
+        "options": {}
+    },
+    "meta": {
+        "version": 1
+    },
+    "964f3be4-6506-4d6b-a8fc-b2b912783e39": {
+        "id": "964f3be4-6506-4d6b-a8fc-b2b912783e39",
+        "class": "ExecuteScript",
+        "name": "Set up global parameters",
+        "options": {
+            "exec": [
+                "() => {",
+                "  //Guess my number skill for Jibo.",
+                "  //overall min and max range for guessing numbers",
+                "  notepad.min = 1;",
+                "  notepad.max = 1000;",
+                "  //a flag so we only give directions once ",
+                "  notepad.give_directions=true;",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 1
+    },
+    "080382e1-87c1-4711-9bf9-cf6cbeabcafe": {
+        "id": "080382e1-87c1-4711-9bf9-cf6cbeabcafe",
+        "class": "Sequence",
+        "name": "Main game",
+        "options": {},
+        "asset-pack": "core",
+        "parent": "0d0b684a-7d50-4441-b370-f68f63327b99",
+        "decorators": [
+            "f06379b7-7edb-45c6-ad5b-aaee88856dc5"
+        ],
+        "children": [
+            "b2ba55dc-cfe9-412d-afe9-68121ed342ac"
+        ]
+    },
+    "f06379b7-7edb-45c6-ad5b-aaee88856dc5": {
+        "id": "f06379b7-7edb-45c6-ad5b-aaee88856dc5",
+        "class": "WhileCondition",
+        "name": "",
+        "options": {
+            "init": [
+                "() => {",
+                "  notepad.play=true;",
+                "}"
+            ],
+            "conditional": [
+                "() => {",
+                "    return notepad.play;",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "b2ba55dc-cfe9-412d-afe9-68121ed342ac": {
+        "id": "b2ba55dc-cfe9-412d-afe9-68121ed342ac",
+        "class": "Sequence",
+        "name": "Play the game",
+        "options": {},
+        "asset-pack": "core",
+        "parent": "080382e1-87c1-4711-9bf9-cf6cbeabcafe",
+        "children": [
+            "cc074a85-c298-4324-8e72-e3bf92b4e72f",
+            "18ad92a1-b04a-4f61-8cde-70754ca471d7",
+            "58aee141-109c-488e-b23e-2c3e6cb1ddd1",
+            "0638c5ad-58f3-4ce0-87df-9298a4c4ea79",
+            "c4aecace-99c6-49f2-aedb-a7b5dead22a9",
+            "9d5b819b-6348-4804-98c6-509f115196db",
+            "36776221-74d1-4d51-8be6-25312dbc4b86"
+        ]
+    },
+    "cc074a85-c298-4324-8e72-e3bf92b4e72f": {
+        "id": "cc074a85-c298-4324-8e72-e3bf92b4e72f",
+        "class": "ExecuteScript",
+        "name": "Set initial parameters and guess.",
+        "options": {
+            "exec": [
+                "() => {",
+                "  //pick a lowest bound between notepad.min and notepad.max",
+                "  notepad.lowest = Math.floor(Math.random() * (notepad.max - notepad.min + 1)) + notepad.min; ",
+                "  //pick an upper bound between notepad.lowest and notepad.max",
+                "  notepad.highest = Math.floor(Math.random() * (notepad.max - notepad.lowest + 1)) + notepad.lowest;",
+                "  //reset the number of guesses",
+                "  notepad.guesses=0;",
+                "}",
+                ""
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "b2ba55dc-cfe9-412d-afe9-68121ed342ac"
+    },
+    "18ad92a1-b04a-4f61-8cde-70754ca471d7": {
+        "id": "18ad92a1-b04a-4f61-8cde-70754ca471d7",
+        "class": "TextToSpeechJs",
+        "name": "Invite the player to pick a number, then tell Jibo higher or lower, or yes when it gets it.",
+        "options": {
+            "getWords": [
+                "(callback) => {",
+                "    let starting_message=\"Pick a number between \"+notepad.lowest+\" and \"+notepad.highest+\".\";",
+                "    if (notepad.give_directions) {",
+                "      starting_message+=\"I will try to guess your number. Tell me if I need to guess higher, lower, or if I've guessed your number.\";",
+                "      starting_message+=\"Tell me when you're ready.\";",
+                "      notepad.give_directions=false;",
+                "    }",
+                "    callback(starting_message);",
+                "}"
+            ],
+            "onWord": [
+                "(word) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "b2ba55dc-cfe9-412d-afe9-68121ed342ac"
+    },
+    "0638c5ad-58f3-4ce0-87df-9298a4c4ea79": {
+        "id": "0638c5ad-58f3-4ce0-87df-9298a4c4ea79",
+        "class": "Sequence",
+        "name": "Guessing loop",
+        "options": {},
+        "asset-pack": "core",
+        "parent": "b2ba55dc-cfe9-412d-afe9-68121ed342ac",
+        "decorators": [
+            "8f84a54e-077e-4b83-a6ef-96f6790f82a1"
+        ],
+        "children": [
+            "4221d660-5d9e-487a-b475-7c8ce1eb7e8c",
+            "54fd20df-2f02-4496-9ca5-0c5fbeee60c9",
+            "8b0d7b03-c862-4ca7-9fd5-0f74ee0daa88",
+            "4a106802-f26b-4c72-a891-20c00abd8a7b",
+            "340e9d64-4193-4395-905f-cbeea60c04d2"
+        ]
+    },
+    "8f84a54e-077e-4b83-a6ef-96f6790f82a1": {
+        "id": "8f84a54e-077e-4b83-a6ef-96f6790f82a1",
+        "class": "WhileCondition",
+        "name": "",
+        "options": {
+            "init": [
+                "() => {",
+                "  notepad.game_over=false;",
+                "}"
+            ],
+            "conditional": [
+                "() => {",
+                "    return !notepad.game_over;",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "8b0d7b03-c862-4ca7-9fd5-0f74ee0daa88": {
+        "id": "8b0d7b03-c862-4ca7-9fd5-0f74ee0daa88",
+        "class": "TextToSpeechJs",
+        "name": "",
+        "options": {
+            "getWords": [
+                "(callback) => {",
+                "    console.log(notepad.preamble+notepad.guess+\"?\");",
+                "    callback(notepad.preamble+notepad.guess+\"?\");",
+                "}"
+            ],
+            "onWord": [
+                "(word) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "0638c5ad-58f3-4ce0-87df-9298a4c4ea79"
+    },
+    "4a106802-f26b-4c72-a891-20c00abd8a7b": {
+        "id": "4a106802-f26b-4c72-a891-20c00abd8a7b",
+        "class": "Listen",
+        "name": "",
+        "options": {
+            "getOptions": [
+                "() => {",
+                "    let options = {",
+                "        heyJibo: false,",
+                "        detectEnd: true,",
+                "        incremental: false,",
+                "        authenticateSpeaker: ''",
+                "    }",
+                "    return options;",
+                "}"
+            ],
+            "rule": "high-low.rule",
+            "onResult": [
+                "(listener) => {",
+                "    listener.on('cloud', function(asrResult, speakerIds) {",
+                "      if (asrResult.NLParse) {",
+                "          notepad.result = asrResult.NLParse.match;",
+                "      } else {",
+                "          notepad.result = 'noMatch';",
+                "      }",
+                "      console.log('listener result: ',notepad.result);",
+                "    });",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "0638c5ad-58f3-4ce0-87df-9298a4c4ea79",
+        "children": [],
+        "decorators": []
+    },
+    "340e9d64-4193-4395-905f-cbeea60c04d2": {
+        "id": "340e9d64-4193-4395-905f-cbeea60c04d2",
+        "class": "Switch",
+        "name": "",
+        "options": {},
+        "asset-pack": "core",
+        "parent": "0638c5ad-58f3-4ce0-87df-9298a4c4ea79",
+        "children": [
+            "71afe8e2-accb-4570-b56d-11c703433fce",
+            "4c2d882a-8e4d-4c70-91c7-391d7a0b9c6c",
+            "7fb766c2-9a7d-4dfd-943e-b7e3a3ab75f0",
+            "14b92665-f220-463e-b0f8-2234285b16a4"
+        ]
+    },
+    "71afe8e2-accb-4570-b56d-11c703433fce": {
+        "id": "71afe8e2-accb-4570-b56d-11c703433fce",
+        "class": "ExecuteScript",
+        "name": "higher",
+        "options": {
+            "exec": [
+                "() => {",
+                "  console.log('higher');",
+                "  notepad.lowest=notepad.guess;",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "340e9d64-4193-4395-905f-cbeea60c04d2",
+        "decorators": [
+            "7915ac83-f925-47a4-a018-021f9385fa3c"
+        ]
+    },
+    "7915ac83-f925-47a4-a018-021f9385fa3c": {
+        "id": "7915ac83-f925-47a4-a018-021f9385fa3c",
+        "class": "Case",
+        "name": "",
+        "options": {
+            "conditional": [
+                "() => {",
+                "  return notepad.result == 'higher';",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "4c2d882a-8e4d-4c70-91c7-391d7a0b9c6c": {
+        "id": "4c2d882a-8e4d-4c70-91c7-391d7a0b9c6c",
+        "class": "ExecuteScript",
+        "name": "lower",
+        "options": {
+            "exec": [
+                "() => {",
+                "  console.log('lower');",
+                "  notepad.highest=notepad.guess;",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "340e9d64-4193-4395-905f-cbeea60c04d2",
+        "decorators": [
+            "1b635d00-56ce-4359-9879-1cd5332ed703"
+        ]
+    },
+    "1b635d00-56ce-4359-9879-1cd5332ed703": {
+        "id": "1b635d00-56ce-4359-9879-1cd5332ed703",
+        "class": "Case",
+        "name": "",
+        "options": {
+            "conditional": [
+                "() => {",
+                "    return notepad.result == 'lower';",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "7fb766c2-9a7d-4dfd-943e-b7e3a3ab75f0": {
+        "id": "7fb766c2-9a7d-4dfd-943e-b7e3a3ab75f0",
+        "class": "ExecuteScript",
+        "name": "done",
+        "options": {
+            "exec": [
+                "() => {",
+                "  console.log('correct');",
+                "  notepad.game_over=true;",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "340e9d64-4193-4395-905f-cbeea60c04d2",
+        "decorators": [
+            "0b9ce6c0-1ebd-4ace-b2fb-8bd5bc0ce6c8"
+        ]
+    },
+    "9d5b819b-6348-4804-98c6-509f115196db": {
+        "id": "9d5b819b-6348-4804-98c6-509f115196db",
+        "class": "TextToSpeech",
+        "name": "Victory speech",
+        "options": {
+            "words": "That was fun. Let's go again. Play again?",
+            "onWord": [
+                "(word) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "b2ba55dc-cfe9-412d-afe9-68121ed342ac"
+    },
+    "54fd20df-2f02-4496-9ca5-0c5fbeee60c9": {
+        "id": "54fd20df-2f02-4496-9ca5-0c5fbeee60c9",
+        "class": "Random",
+        "name": "",
+        "options": {},
+        "asset-pack": "core",
+        "parent": "0638c5ad-58f3-4ce0-87df-9298a4c4ea79",
+        "children": [
+            "d5f1e2a4-5633-439c-af5a-ef6878c89be8",
+            "7c7c2c52-b2d5-4c6d-8afb-3c9e1df58c4e",
+            "c188bdd3-a90d-4528-9971-0d5a2597d70f"
+        ]
+    },
+    "7c7c2c52-b2d5-4c6d-8afb-3c9e1df58c4e": {
+        "id": "7c7c2c52-b2d5-4c6d-8afb-3c9e1df58c4e",
+        "class": "ExecuteScript",
+        "name": "",
+        "options": {
+            "exec": [
+                "() => {",
+                "  notepad.preamble=\"Is your number \";",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "54fd20df-2f02-4496-9ca5-0c5fbeee60c9"
+    },
+    "d5f1e2a4-5633-439c-af5a-ef6878c89be8": {
+        "id": "d5f1e2a4-5633-439c-af5a-ef6878c89be8",
+        "class": "ExecuteScript",
+        "name": "",
+        "options": {
+            "exec": [
+                "() => {",
+                "  notepad.preamble=\"I'm guessing your number is \";",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "54fd20df-2f02-4496-9ca5-0c5fbeee60c9"
+    },
+    "c188bdd3-a90d-4528-9971-0d5a2597d70f": {
+        "id": "c188bdd3-a90d-4528-9971-0d5a2597d70f",
+        "class": "ExecuteScript",
+        "name": "",
+        "options": {
+            "exec": [
+                "() => {",
+                "  notepad.preamble=\"Hmm, let me think. How about \";",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "54fd20df-2f02-4496-9ca5-0c5fbeee60c9"
+    },
+    "0b9ce6c0-1ebd-4ace-b2fb-8bd5bc0ce6c8": {
+        "id": "0b9ce6c0-1ebd-4ace-b2fb-8bd5bc0ce6c8",
+        "class": "Case",
+        "name": "",
+        "options": {
+            "conditional": [
+                "() => {",
+                "  return notepad.result == 'correct';",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "14b92665-f220-463e-b0f8-2234285b16a4": {
+        "id": "14b92665-f220-463e-b0f8-2234285b16a4",
+        "class": "TextToSpeech",
+        "name": "bad input",
+        "options": {
+            "words": "I need to know if I should guess lower or higher.",
+            "onWord": [
+                "(word) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "340e9d64-4193-4395-905f-cbeea60c04d2"
+    },
+    "4221d660-5d9e-487a-b475-7c8ce1eb7e8c": {
+        "id": "4221d660-5d9e-487a-b475-7c8ce1eb7e8c",
+        "class": "ExecuteScript",
+        "name": "",
+        "options": {
+            "exec": [
+                "() => {",
+                "  notepad.guess = Math.floor((notepad.lowest+notepad.highest)/2);",
+                "  notepad.guesses++;",
+                "  console.log('Guess is ',notepad.guess);",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "0638c5ad-58f3-4ce0-87df-9298a4c4ea79"
+    },
+    "0d0b684a-7d50-4441-b370-f68f63327b99": {
+        "id": "0d0b684a-7d50-4441-b370-f68f63327b99",
+        "class": "Parallel",
+        "name": "The skill proper",
+        "options": {
+            "succeedOnOne": true
+        },
+        "asset-pack": "core",
+        "parent": 1,
+        "children": [
+            "080382e1-87c1-4711-9bf9-cf6cbeabcafe",
+            "41d11eab-eb0a-4c99-84fa-d7da14958198"
+        ]
+    },
+    "41d11eab-eb0a-4c99-84fa-d7da14958198": {
+        "id": "41d11eab-eb0a-4c99-84fa-d7da14958198",
+        "class": "Subtree",
+        "name": "Idle",
+        "options": {
+            "behaviorPath": "idle.bt",
+            "getNotepad": [
+                "() => {",
+                "    return {};",
+                "}"
+            ],
+            "onResult": [
+                "(treeResult) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "0d0b684a-7d50-4441-b370-f68f63327b99"
+    },
+    "58aee141-109c-488e-b23e-2c3e6cb1ddd1": {
+        "id": "58aee141-109c-488e-b23e-2c3e6cb1ddd1",
+        "class": "ListenJs",
+        "name": "Wait for player to be ready",
+        "options": {
+            "getOptions": [
+                "() => {",
+                "    let options = {",
+                "        heyJibo: false,",
+                "        detectEnd: true,",
+                "        incremental: false,",
+                "        authenticateSpeaker: ''",
+                "    }",
+                "    return options;",
+                "}"
+            ],
+            "getRule": [
+                "(callback) => {",
+                "    callback(\"TopRule = $* (ready|ok|go|start) {match='true'} $*;\");",
+                "}"
+            ],
+            "onResult": [
+                "(listener) => {",
+                "    listener.on('cloud', function(asrResult, speakerIds) {",
+                "      if (asrResult.NLParse && asrResult.NLParse.match=='true') {",
+                "        notepad.loop=false;",
+                "        console.log(notepad.loop);",
+                "      }",
+                "    });",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "b2ba55dc-cfe9-412d-afe9-68121ed342ac",
+        "decorators": [
+            "22bc89f5-c742-48d9-9ca6-ee5b6d6725ed"
+        ]
+    },
+    "22bc89f5-c742-48d9-9ca6-ee5b6d6725ed": {
+        "id": "22bc89f5-c742-48d9-9ca6-ee5b6d6725ed",
+        "class": "WhileCondition",
+        "name": "",
+        "options": {
+            "init": [
+                "() => {",
+                "  notepad.loop=true;",
+                "}"
+            ],
+            "conditional": [
+                "() => {",
+                "    return notepad.loop;",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "c4aecace-99c6-49f2-aedb-a7b5dead22a9": {
+        "id": "c4aecace-99c6-49f2-aedb-a7b5dead22a9",
+        "class": "TextToSpeechJs",
+        "name": "Give score",
+        "options": {
+            "getWords": [
+                "(callback) => {",
+                "    callback('That took me '+notepad.guesses+' guesses.');",
+                "}"
+            ],
+            "onWord": [
+                "(word) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "b2ba55dc-cfe9-412d-afe9-68121ed342ac"
+    },
+    "36776221-74d1-4d51-8be6-25312dbc4b86": {
+        "id": "36776221-74d1-4d51-8be6-25312dbc4b86",
+        "class": "ListenJs",
+        "name": "",
+        "options": {
+            "getOptions": [
+                "() => {",
+                "    let options = {",
+                "        heyJibo: false,",
+                "        detectEnd: true,",
+                "        incremental: false,",
+                "        authenticateSpeaker: ''",
+                "    }",
+                "    return options;",
+                "}"
+            ],
+            "getRule": [
+                "(callback) => {",
+                "    callback(\"TopRule = $* $factory:yes_no {result=yes_no._nl} $*;\");",
+                "}"
+            ],
+            "onResult": [
+                "(listener) => {",
+                "    listener.on('cloud', function(asrResult, speakerIds) {",
+                "      if (asrResult.NLParse) {",
+                "          notepad.play = (asrResult.NLParse.result=='yes')?true:false;",
+                "          notepad.loop = false;",
+                "          console.log('notepad.loop: ',notepad.loop);",
+                "          console.log('notepad.play: ',notepad.play);",
+                "      } ",
+                "    });",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "b2ba55dc-cfe9-412d-afe9-68121ed342ac",
+        "decorators": [
+            "e2a77073-cc9a-4abf-bb55-ac46619c71fd"
+        ]
+    },
+    "e2a77073-cc9a-4abf-bb55-ac46619c71fd": {
+        "id": "e2a77073-cc9a-4abf-bb55-ac46619c71fd",
+        "class": "WhileCondition",
+        "name": "",
+        "options": {
+            "init": [
+                "() => {",
+                "  notepad.loop=true;",
+                "}"
+            ],
+            "conditional": [
+                "() => {",
+                "    return notepad.loop;",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "755f3e00-2534-4d41-ad8d-0af8e2f63cf6": {
+        "id": "755f3e00-2534-4d41-ad8d-0af8e2f63cf6",
+        "class": "TextToSpeech",
+        "name": "Thank user",
+        "options": {
+            "words": "Hey, thanks for playing with me!",
+            "onWord": [
+                "(word) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 1
+    },
+    "de62b17c-2a6f-4120-8c1d-ed059842b025": {
+        "id": "de62b17c-2a6f-4120-8c1d-ed059842b025",
+        "class": "ExecuteScriptAsync",
+        "name": "Center robot",
+        "options": {
+            "exec": [
+                "(succeed, fail) => {",
+                "  let dofs = jibo.animate.dofs;",
+                "  jibo.animate.centerRobot(dofs.ALL, true, () => {",
+                "      succeed();    ",
+                "  });",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 1
     }
-  },
-  "6": {
-    "id": 6,
-    "class": "PlayAudio",
-    "name": "Bawhoop",
-    "asset-pack": "core",
-    "parent": 1,
-    "options": {
-      "audioPath": "FX_Bawhoop.mp3"
-    }
-  },
-  "meta": {
-    "version": 1
-  }
 }

@@ -1,0 +1,4 @@
+TopRule = $* ($Higher {match='higher'}| $Lower {match='lower'} | $Correct {match='correct'}) $*;
+Higher = higher | low;
+Lower = lower | high;
+Correct = ( correct | right | (you got it) | (thats it) | (thats my number) | yes | win | yay );

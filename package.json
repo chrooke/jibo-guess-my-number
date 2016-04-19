@@ -10,5 +10,11 @@
     "behaviorify": "^1.0.0",
     "jibo": "^2.0.0"
   },
-  "license": "UNLICENSED"
+  "author" : "Chris Cooke",
+	"license": "MIT",
+	"private": true,
+	"repository" :
+  		{ "type" : "git"
+		, "url" : "https://github.com/chrooke/jibo-guess-my-number.git"
+ 	 }
 }
