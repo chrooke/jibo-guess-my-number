@@ -16,3 +16,7 @@ To make it a little interesting, Jibo picks a different range for you each time.
 * Display Jibo's guess on in numbers on his screen as he guesses.
 * Allow Jibo to pick the number and the player to guess. (Requires SDK support for NLU of numbers, which is not released yet.)
 * Better checking at boundaries. For example, if Jibo is already at the lower bound and the player says to go lower.
+
+## Version History
+0.1 Initial release.
+0.2 Updated for jibo-sdk 1.3.3
